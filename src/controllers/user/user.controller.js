@@ -76,17 +76,17 @@ userController.register = async (req, res, next) => {
   try {
     console.log(req.files.uploads[0].path);
     let filePath = req.files.uploads[0].path.substr(req.files.uploads[0].path.lastIndexOf('\\') + 1);
-    const { firstname, lastname, email, username, password, role } = req.body;
+    const { firstname, lastname, email, password, role, phoneNumber } = req.body;
     // Validate user input
-    if (!(email && password && firstname && lastname && username)) {
+    if (!(email && password && firstname && lastname)) {
       res.status(400).send("All input is required");
     }
     // Create user in our database
     const newUser = new User({
       firstname: firstname,
       lastname: lastname,
+      phoneNumber: phoneNumber,
       email: email.toLowerCase(), // sanitize: convert email to lowercase
-      username,
       password,
       role,
       imagePath: filePath
@@ -123,17 +123,18 @@ userController.login = async (req, res, next) => {
   // Our login logic starts here
   try {
     // Get user input
-    const { email, password } = req.body;
+    // methodtype 1 = email , 2 = phone
+    const { email, password, phoneNumber, methodType } = req.body;
 
     // Validate user input
     if (!(email && password)) {
       res.status(400).send("All input is required");
     }
     // Validate if user exist in our database
-    const user = await User.findOne({ email });
+    const user =  methodType === 1 ?await User.findOne({ email }) :await User.findOne({ phoneNumber });
 
     if (!user) {
-      const err = new Error(`The email ${email} was not found on our system`);
+      const err = new Error(`The email ${methodType === 1 ? email : phoneNumber} was not found on our system`);
       err.status = 401;
       return next(err);
     }
@@ -151,7 +152,6 @@ userController.login = async (req, res, next) => {
           firstname: user.firstname,
           lastname: user.lastname,
           email: user.email,
-          username: user.username,
           dateCreated: user.dateCreated,
           phoneNumber: user.phoneNumber,
           imagePath: user.imagePath,

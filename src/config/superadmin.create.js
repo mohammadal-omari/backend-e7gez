@@ -10,7 +10,6 @@ exports.createSuperAdmin = () => {
                     firstname: process.env.firstname,
                     lastname: process.env.lastname,
                     email: process.env.email.toLowerCase(), 
-                    username: process.env.username,
                     password: process.env.password,
                     role: process.env.role,
                     phoneNumber: process.env.phoneNumber,
