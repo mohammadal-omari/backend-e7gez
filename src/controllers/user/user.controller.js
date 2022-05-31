@@ -74,8 +74,8 @@ userController.register = async (req, res, next) => {
 
   // Our register logic starts here
   try {
-    console.log(req.files.uploads[0].path);
-    let filePath = req.files.uploads[0].path.substr(req.files.uploads[0].path.lastIndexOf('\\') + 1);
+    // console.log(req.files.uploads[0].path);
+    // let filePath = req.files.uploads[0].path.substr(req.files.uploads[0].path.lastIndexOf('\\') + 1);
     const { firstname, lastname, email, password, role, phoneNumber } = req.body;
     // Validate user input
     if (!(email && password && firstname && lastname)) {
@@ -89,7 +89,7 @@ userController.register = async (req, res, next) => {
       email: email.toLowerCase(), // sanitize: convert email to lowercase
       password,
       role,
-      imagePath: filePath
+      imagePath: "im-user.png"
     });
 
     newUser.save().then(doc => {
