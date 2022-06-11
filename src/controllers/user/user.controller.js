@@ -2,7 +2,6 @@ const express = require('express');
 const User = require("../../models/user");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-//const { use } = require('../../routes/v1');
 
 const userController = {};
 
@@ -156,7 +155,6 @@ userController.login = async (req, res, next) => {
           phoneNumber: user.phoneNumber,
           imagePath: user.imagePath,
           token: token,
-          expiresIn: (3600 * 4000),
           role: user.role
         });
       }
