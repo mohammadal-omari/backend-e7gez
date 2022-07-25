@@ -4,9 +4,13 @@ autoIncrement.initialize(mongoose.connection);
 
 const ReservationSchema = mongoose.Schema({
     name: { type: String, default: 'name', required: true },
-    usertId: {type: mongoose.Schema.Types.ObjectId, required: false, ref: 'user' },
+    usertId: {type: mongoose.Schema.Types.ObjectId, required: true, ref: 'user' },
     reserveNumber: { type: String, required: true, index: { unique: true } },
-    reserveType: { type: mongoose.Schema.Types.ObjectId, required: true},
+    numberOfGuests: { type: Number, required: true },
+    outSide: { type: Boolean, required: false, default: false },
+    isActive: { type: Boolean, required: false, default: false },
+    dateOfReservation: {type: Date, required: true, default: Date.now()},
+    reserveType: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'item'},
 
 }, { collection: 'Reservation' });
 

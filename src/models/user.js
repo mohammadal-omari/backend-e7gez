@@ -13,7 +13,8 @@ const userSchema = new mongoose.Schema({
   imagePath: { type:String,default:null },
   role: { type: String, default: "Admin" },
   token: { type: String },
-  userNumber: { type: String, required: true, index: { unique: true } },
+  point: { type: Number, default: 0 },
+  userNumber: { type: Number, required: true, index: { unique: true } },
 }, { collection: "user" }); 
 
 userSchema.pre('save', async function (next) {

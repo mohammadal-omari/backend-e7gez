@@ -7,11 +7,11 @@ const userController = {};
 
 userController.updateUserProfile = async (req, res, next) => {
   try {
-    const { firstname, lastname, email, phoneNumber } = req.body;
-    let imagePath = '';
-    let image = JSON.parse(JSON.stringify(req.files)).image.path;
-    if (image != undefined) {
-      imagePath = image.substr(image.lastIndexOf('\\') + 1);
+      const { firstname, lastname, email, phoneNumber } = req.body;
+      let imagePath = '';
+      let image = JSON.parse(JSON.stringify(req.files)).image.path;
+      if (image != undefined) {
+        imagePath = image.substr(image.lastIndexOf('\\') + 1);
     }
 
     User.findOneAndUpdate({ email: email }, { firstname: firstname, lastname: lastname, phoneNumber: phoneNumber, imagePath: imagePath })
