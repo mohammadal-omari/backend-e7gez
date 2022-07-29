@@ -4,16 +4,16 @@ const autoIncrement = require('mongoose-auto-increment');
 autoIncrement.initialize(mongoose.connection);
 
 const userSchema = new mongoose.Schema({
-  firstname: { type: String, default: null, required: true },
-  lastname: { type: String, default: null, required: true },
+  firstname: { type: String, default: null, required: false },
+  lastname: { type: String, default: null, required: false },
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true },
   dateCreated: { type: Date, default: Date.now() },
-  phoneNumber: { type:String,default:null },
-  imagePath: { type:String,default:null },
-  role: { type: String, default: "Admin" },
+  phoneNumber: { type:String,default:'xxxxxxxxxx',required: true },
+  imagePath: { type:String,default:'im-user.png' },
+  role: { type: String, default: "Admin" , required: true},
   token: { type: String },
-  point: { type: Number, default: 0 },
+  point: { type: Number, default: 0, required: false },
   userNumber: { type: Number, required: true, index: { unique: true } },
 }, { collection: "user" }); 
 
