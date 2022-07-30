@@ -2,16 +2,20 @@ const express = require('express');
 const User = require("../../models/user");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+let generator = require('generate-password');
+const ROLE = require('../../shared/enums/role');
+const sgMail = require('@sendgrid/mail');
+const SENDGRID_API_KEY = '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'
 
 const userController = {};
 
 userController.updateUserProfile = async (req, res, next) => {
   try {
-      const { firstname, lastname, email, phoneNumber } = req.body;
-      let imagePath = '';
-      let image = JSON.parse(JSON.stringify(req.files)).image.path;
-      if (image != undefined) {
-        imagePath = image.substr(image.lastIndexOf('\\') + 1);
+    const { firstname, lastname, email, phoneNumber } = req.body;
+    let imagePath = '';
+    let image = JSON.parse(JSON.stringify(req.files)).image.path;
+    if (image != undefined) {
+      imagePath = image.substr(image.lastIndexOf('\\') + 1);
     }
 
     User.findOneAndUpdate({ email: email }, { firstname: firstname, lastname: lastname, phoneNumber: phoneNumber, imagePath: imagePath })
@@ -75,7 +79,37 @@ userController.register = async (req, res, next) => {
   try {
     // console.log(req.files.uploads[0].path);
     // let filePath = req.files.uploads[0].path.substr(req.files.uploads[0].path.lastIndexOf('\\') + 1);
-    const { firstname, lastname, email, password, role, phoneNumber } = req.body;
+    let { firstname, lastname, email, password, role, phoneNumber } = req.body.userDto;
+    if (role == ROLE.ADMIN.toString()) {
+      password = generator.generate({
+        length: 10,
+        numbers: true
+      });
+      console.log(email);
+      sgMail.setApiKey(SENDGRID_API_KEY);
+      const msg = {
+        to: email,
+        from: 'mostafaalmomani98@gmail.com',
+        subject: `Welcome to E7JEZ`,
+        html: `
+                    <h1 style="color: #61dafb">Please use the following password access your account</h1>
+                    <p style="color: #61dafb">Email: ${email}</p>
+                    <p style="color: #61dafb">$Password: ${password}</p>
+                    <hr />
+                    <p style="color: #61dafb">This email may contain sensetive information</p>
+                `,
+      };
+
+      sgMail
+        .send(msg)
+        .then(sent => {
+          console.log(sent);
+        })
+        .catch(err => {
+          console.log(err);
+          
+        });
+    }
     // Validate user input
     if (!(email && password && firstname && lastname)) {
       res.status(400).send("All input is required");
@@ -92,11 +126,11 @@ userController.register = async (req, res, next) => {
     });
 
     newUser.save().then(doc => {
-      res.status(201).json(doc);
+      res.status(201).json({message:'Succsess'});
     }).catch(err => {
       console.log(err);
       if (err.code === 11000) {
-        const error = new Error(`Email address ${req.body.email} or user name ${req.body.username} is already taken`);
+        const error = new Error(`Email address ${req.body.userDto.email} is already taken`);
         error.status = 400
         next(error);
       } else {
@@ -130,7 +164,7 @@ userController.login = async (req, res, next) => {
       res.status(400).send("All input is required");
     }
     // Validate if user exist in our database
-    const user =  methodType === 1 ?await User.findOne({ email }) :await User.findOne({ phoneNumber });
+    const user = methodType === 1 ? await User.findOne({ email }) : await User.findOne({ phoneNumber });
 
     if (!user) {
       const err = new Error(`The email ${methodType === 1 ? email : phoneNumber} was not found on our system`);
