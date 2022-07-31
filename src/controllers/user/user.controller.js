@@ -11,17 +11,17 @@ const userController = {};
 
 userController.updateUserProfile = async (req, res, next) => {
   try {
-    const { firstname, lastname, email, phoneNumber } = req.body;
-    let imagePath = '';
-    let image = JSON.parse(JSON.stringify(req.files)).image.path;
-    if (image != undefined) {
-      imagePath = image.substr(image.lastIndexOf('\\') + 1);
-    }
+    const { firstname, lastname, email, phoneNumber, role } = req.body.userDto;
+    // let imagePath = '';
+    // let image = JSON.parse(JSON.stringify(req.files)).image.path;
+    // if (image != undefined) {
+    //   imagePath = image.substr(image.lastIndexOf('\\') + 1);
+    // }
 
-    User.findOneAndUpdate({ email: email }, { firstname: firstname, lastname: lastname, phoneNumber: phoneNumber, imagePath: imagePath })
+    User.findOneAndUpdate({ email: email }, { role:role,firstname: firstname, lastname: lastname, phoneNumber: phoneNumber })
       .then(doc => {
         res.status(200).json({
-          status: true
+          message: 'Success'
         });
       }).catch(err => {
         console.log(err);
@@ -227,4 +227,30 @@ userController.getUserInfo = (req, res, next) => {
   }
 }
 
+userController.getById = (req, res, next) => {
+  try {
+    const { userNumber } = req.params;
+    User.findOne({ userNumber: userNumber }).then(doc => {
+      res.status(200).send({ user: doc });
+    }).catch(err => {
+      res.status(500).send({ err: err });
+    })
+  } catch (err) {
+    console.log(err);
+    next(e);
+  }
+}
+
+userController.getAll = (req, res, next) => {
+  try {
+    User.find({}).then(doc => {
+      res.status(200).send({ users: doc });
+    }).catch(err => {
+      res.status(500).send({ err: err });
+    })
+  } catch (err) {
+    console.log(err);
+    next(e);
+  }
+}
 module.exports = userController

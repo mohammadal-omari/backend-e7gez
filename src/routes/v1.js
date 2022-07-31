@@ -28,7 +28,10 @@ router.post('/item/create',JWTAuth, itemController.create);
 router.get('/item/get',JWTAuth, itemController.getAll);
 router.get('/item/get/:itemNumber',JWTAuth, itemController.getById);
 router.post('/item/update',JWTAuth, itemController.update);
-
+// --------------------------------User------------------------------------------------
+router.get('/user/get', userController.getAll);
+router.get('/user/get/:userNumber', userController.getById);
+router.post('/user/update', userController.updateUserProfile);
 
 
 // ---------------------------- Dashboard Routes --------------------------------
