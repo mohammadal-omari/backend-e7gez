@@ -122,7 +122,8 @@ userController.register = async (req, res, next) => {
       email: email.toLowerCase(), // sanitize: convert email to lowercase
       password,
       role,
-      imagePath: "im-user.png"
+      imagePath: "im-user.png",
+      createdBy: '62e5b1e9ba47892c09024424'
     });
 
     newUser.save().then(doc => {

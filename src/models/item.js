@@ -13,7 +13,8 @@ const ItemSchema = mongoose.Schema({
     menu: { type: String, required: false},
     categoryName: { type: String, required: true},
     locationUrl: { type: String, required: false},
-    dateCreated: {type: Date,  default: new Date()}
+    dateCreated: {type: Date,  default: new Date()},
+    createdBy: {type: mongoose.Schema.Types.ObjectId, required: false, ref: 'user' },
     // price: { type: Double, required: true}
 
 });

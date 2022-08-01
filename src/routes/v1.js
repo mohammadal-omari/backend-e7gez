@@ -24,10 +24,10 @@ router.post('/updatePassword',JWTAuth, userController.updatePassword);
 router.post('/updateUserProfile',JWTAuth, multipartMiddleware, userController.updateUserProfile);
 router.get('/userInfo/:email',JWTAuth, userController.getUserInfo);
 // ---------------------------- Item Routes ------------------------------------------
-router.post('/item/create',JWTAuth, itemController.create);
-router.get('/item/get',JWTAuth, itemController.getAll);
-router.get('/item/get/:itemNumber',JWTAuth, itemController.getById);
-router.post('/item/update',JWTAuth, itemController.update);
+router.post('/item/create', itemController.create);
+router.get('/item/get', itemController.getAll);
+router.get('/item/get/:itemNumber', itemController.getById);
+router.post('/item/update', itemController.update);
 // --------------------------------User------------------------------------------------
 router.get('/user/get', userController.getAll);
 router.get('/user/get/:userNumber', userController.getById);

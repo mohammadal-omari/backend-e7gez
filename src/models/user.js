@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
   role: { type: String, default: "Admin" , required: true},
   token: { type: String },
   point: { type: Number, default: 0, required: false },
+  createdBy: {type: mongoose.Schema.Types.ObjectId, required: false, ref: 'user' },
   userNumber: { type: Number, required: true, index: { unique: true } },
 }, { collection: "user" }); 
 
