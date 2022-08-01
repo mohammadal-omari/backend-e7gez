@@ -5,25 +5,28 @@ const itemController = {};
 itemController.create = async (req, res, next) => {
 
     try {
-    // let filePath = req.files.uploads[0].path.substr(req.files.uploads[0].path.lastIndexOf('\\') + 1);
-        const { name, image, location, country, menu } = req.body;
+        // let filePath = req.files.uploads[0].path.substr(req.files.uploads[0].path.lastIndexOf('\\') + 1);
+        const { name, location, country, menu, admins, categoryName, locationUrl, city } = req.body.itemDto;
         const newItem = new Item({
             name,
-            image,
             location,
             country,
             menu,
-            usertId: req.user._id
+            categoryName,
+            locationUrl,
+            admins,
+            city,
+            createdBy: '62e5b1e9ba47892c09024424'
         });
 
         newItem.save().then(doc => {
             return res.status(200).send({
-                message: 'saved'
-              });
+                message: 'Saved successfully'
+            });
         }).catch(err => {
             return res.status(500).send({
                 message: err.message
-              });
+            });
         });
 
     } catch (error) {
@@ -37,12 +40,12 @@ itemController.getAll = async (req, res, next) => {
     try {
         Item.find().then(doc => {
             return res.status(200).send({
-                data: doc
-              });
+                items: doc
+            });
         }).catch(err => {
             return res.status(500).send({
                 message: err.message
-              });
+            });
         });
 
     } catch (error) {
@@ -53,15 +56,15 @@ itemController.getAll = async (req, res, next) => {
 
 itemController.getById = async (req, res, next) => {
     try {
-        const {itemNumber} = req.params;
-        Item.findOne({itemNumber: itemNumber}).then(doc => {
+        const { itemNumber } = req.params;
+        Item.findOne({ itemNumber: itemNumber }).then(doc => {
             return res.status(200).send({
-                data: doc
-              });
+                item: doc
+            });
         }).catch(err => {
             return res.status(500).send({
                 message: err.message
-              });
+            });
         });
 
     } catch (error) {
@@ -72,15 +75,15 @@ itemController.getById = async (req, res, next) => {
 
 itemController.update = async (req, res, next) => {
     try {
-        const { name, image, location, country, menu, itemNumber } = req.body;
-        Item.updateOne({itemNumber: itemNumber},{name, image, location, country, menu,usertId: req.user._id}).then(doc => {
+        const { admins, name, locationUrl, country, menu, categoryName, itemNumber, city } = req.body.itemDto;
+        Item.updateOne({ itemNumber: itemNumber }, { categoryName, locationUrl, admins, city, name, country, menu }).then(doc => {
             return res.status(200).send({
-                message: 'saved'
-              });
+                message: 'Saved successfully'
+            });
         }).catch(err => {
             return res.status(500).send({
                 message: err.message
-              });
+            });
         });
 
     } catch (error) {
