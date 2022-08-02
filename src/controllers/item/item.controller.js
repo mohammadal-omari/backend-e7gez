@@ -75,8 +75,8 @@ itemController.getById = async (req, res, next) => {
 
 itemController.update = async (req, res, next) => {
     try {
-        const { admins, name, locationUrl, country, menu, categoryName, itemNumber, city } = req.body.itemDto;
-        Item.updateOne({ itemNumber: itemNumber }, { categoryName, locationUrl, admins, city, name, country, menu }).then(doc => {
+        const { admins, name, locationUrl, country, menu, categoryName, itemNumber, city, isActive } = req.body.itemDto;
+        Item.updateOne({ itemNumber: itemNumber }, {isActive, categoryName, locationUrl, admins, city, name, country, menu }).then(doc => {
             return res.status(200).send({
                 message: 'Saved successfully'
             });

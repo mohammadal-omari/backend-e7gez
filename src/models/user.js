@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
   imagePath: { type:String,default:'im-user.png' },
   role: { type: String, default: "Admin" , required: true},
   token: { type: String },
+  isActive: { type: Boolean, required: true, default: true },
   point: { type: Number, default: 0, required: false },
   createdBy: {type: mongoose.Schema.Types.ObjectId, required: false, ref: 'user' },
   userNumber: { type: Number, required: true, index: { unique: true } },

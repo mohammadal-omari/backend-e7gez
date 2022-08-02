@@ -8,6 +8,7 @@ const ItemSchema = mongoose.Schema({
     admins: {type: [mongoose.Schema.Types.ObjectId], required: false, ref: 'user' },
     itemNumber: { type: String, required: true, index: { unique: true } },
     image: { type: String, required: true, default: 'im-user.png' },
+    isActive: { type: Boolean, required: true, default: true },
     country: { type: String, required: true},
     city: { type: String, required: true},
     menu: { type: String, required: false},

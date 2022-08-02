@@ -11,14 +11,14 @@ const userController = {};
 
 userController.updateUserProfile = async (req, res, next) => {
   try {
-    const { firstname, lastname, email, phoneNumber, role } = req.body.userDto;
+    const { firstname, lastname, email, phoneNumber, role, isActive } = req.body.userDto;
     // let imagePath = '';
     // let image = JSON.parse(JSON.stringify(req.files)).image.path;
     // if (image != undefined) {
     //   imagePath = image.substr(image.lastIndexOf('\\') + 1);
     // }
 
-    User.findOneAndUpdate({ email: email }, { role:role,firstname: firstname, lastname: lastname, phoneNumber: phoneNumber })
+    User.findOneAndUpdate({ email: email }, { isActive: isActive, role: role, firstname: firstname, lastname: lastname, phoneNumber: phoneNumber })
       .then(doc => {
         res.status(200).json({
           message: 'Success'
@@ -107,7 +107,7 @@ userController.register = async (req, res, next) => {
         })
         .catch(err => {
           console.log(err);
-          
+
         });
     }
     // Validate user input
@@ -127,7 +127,7 @@ userController.register = async (req, res, next) => {
     });
 
     newUser.save().then(doc => {
-      res.status(201).json({message:'Succsess'});
+      res.status(201).json({ message: 'Succsess' });
     }).catch(err => {
       console.log(err);
       if (err.code === 11000) {
