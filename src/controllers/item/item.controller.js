@@ -38,7 +38,10 @@ itemController.create = async (req, res, next) => {
 itemController.getAll = async (req, res, next) => {
 
     try {
-        Item.find().then(doc => {
+        Item.find().populate({
+            path: 'categoryName',
+            model: 'category'
+        }).then(doc => {
             return res.status(200).send({
                 items: doc
             });
@@ -57,7 +60,10 @@ itemController.getAll = async (req, res, next) => {
 itemController.getById = async (req, res, next) => {
     try {
         const { itemNumber } = req.params;
-        Item.findOne({ itemNumber: itemNumber }).then(doc => {
+        Item.findOne({ itemNumber: itemNumber }).populate({
+            path: 'categoryName',
+            model: 'category'
+        }).then(doc => {
             return res.status(200).send({
                 item: doc
             });

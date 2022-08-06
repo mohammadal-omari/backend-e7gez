@@ -7,6 +7,7 @@ const JWTAuth = require('../middleware/auth/JWT.auth');
 //-------------------------------------------------------------------------
 const userController = require('../controllers/user/user.controller');
 const itemController = require('../controllers/item/item.controller');
+const adminController = require('../controllers/admin/admin');
 const dashboardController =  require('../controllers/dashboard/dashboard.controller');
 const fileController = require('../controllers/static files/read.files.controller');
 //-------------------------------------------------------------------------
@@ -32,7 +33,11 @@ router.post('/item/update', itemController.update);
 router.get('/user/get', userController.getAll);
 router.get('/user/get/:userNumber', userController.getById);
 router.post('/user/update', userController.updateUserProfile);
-
+// ---------------------------- Admin Routes --------------------------------
+router.post('/category/create', adminController.createCatogery);
+router.get('/category/get', adminController.getAll);
+router.post('/category/update', adminController.updateCatogery);
+router.get('/category/get/:categoryNumber', adminController.getById);
 
 // ---------------------------- Dashboard Routes --------------------------------
 

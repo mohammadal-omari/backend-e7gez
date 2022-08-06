@@ -12,7 +12,7 @@ const ItemSchema = mongoose.Schema({
     country: { type: String, required: true},
     city: { type: String, required: true},
     menu: { type: String, required: false},
-    categoryName: { type: String, required: true},
+    categoryName: { type: [mongoose.Schema.Types.ObjectId], required: true, ref: 'category'},
     locationUrl: { type: String, required: false},
     dateCreated: {type: Date,  default: new Date()},
     createdBy: {type: mongoose.Schema.Types.ObjectId, required: false, ref: 'user' },

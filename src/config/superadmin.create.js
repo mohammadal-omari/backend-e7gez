@@ -2,8 +2,8 @@ const SuperAdmin = require('../models/user');
 exports.createSuperAdmin = () => {
 
     try {
-        SuperAdmin.countDocuments().then(docCount => {
-            if(docCount > 0){
+        SuperAdmin.findOne({role: 'SuperAdmin'}).then(doc => {
+            if(doc){
                 console.log('SuperAdmin already created ');
             } else {
                 let defaultSuperAdmin = new SuperAdmin({
