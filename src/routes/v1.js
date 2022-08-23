@@ -43,6 +43,8 @@ router.get('/category/get/:categoryNumber', adminController.getById);
 
 // ---------------------------- Static files Routes --------------------------------
 router.get('/readFile/:path', fileController.get);
+router.post('/thumbnail-upload/', multipartMiddleware, fileController.create);
+
 
 
 
