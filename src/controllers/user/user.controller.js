@@ -11,14 +11,14 @@ const userController = {};
 
 userController.updateUserProfile = async (req, res, next) => {
   try {
-    const { firstname, lastname, email, phoneNumber, role, isActive } = req.body.userDto;
+    const { firstname, lastname, email, phoneNumber, role, isActive, imagePath } = req.body.userDto;
     // let imagePath = '';
     // let image = JSON.parse(JSON.stringify(req.files)).image.path;
     // if (image != undefined) {
     //   imagePath = image.substr(image.lastIndexOf('\\') + 1);
     // }
 
-    User.findOneAndUpdate({ email: email }, { isActive: isActive, role: role, firstname: firstname, lastname: lastname, phoneNumber: phoneNumber })
+    User.findOneAndUpdate({ email: email }, { imagePath: imagePath, isActive: isActive, role: role, firstname: firstname, lastname: lastname, phoneNumber: phoneNumber })
       .then(doc => {
         res.status(200).json({
           message: 'Success'
@@ -79,7 +79,7 @@ userController.register = async (req, res, next) => {
   try {
     // console.log(req.files.uploads[0].path);
     // let filePath = req.files.uploads[0].path.substr(req.files.uploads[0].path.lastIndexOf('\\') + 1);
-    let { firstname, lastname, email, password, role, phoneNumber } = req.body.userDto;
+    let { firstname, lastname, email, password, role, phoneNumber, imagePath } = req.body.userDto;
     if (role == ROLE.ADMIN.toString()) {
       password = generator.generate({
         length: 10,
@@ -123,7 +123,8 @@ userController.register = async (req, res, next) => {
       password,
       role,
       imagePath: "im-user.png",
-      createdBy: '62e5b1e9ba47892c09024424'
+      createdBy: '62e5b1e9ba47892c09024424',
+      imagePath
     });
 
     newUser.save().then(doc => {
@@ -231,11 +232,15 @@ userController.getUserInfo = (req, res, next) => {
 userController.getById = (req, res, next) => {
   try {
     const { userNumber } = req.params;
-    User.findOne({ userNumber: userNumber }).then(doc => {
-      res.status(200).send({ user: doc });
-    }).catch(err => {
-      res.status(500).send({ err: err });
-    })
+    User.findOne({ userNumber: userNumber })
+      .populate({
+        path: 'imagePath',
+        model: 'file'
+      }).then(doc => {
+        res.status(200).send({ user: doc });
+      }).catch(err => {
+        res.status(500).send({ err: err });
+      })
   } catch (err) {
     console.log(err);
     next(e);
@@ -244,7 +249,10 @@ userController.getById = (req, res, next) => {
 
 userController.getAll = (req, res, next) => {
   try {
-    User.find({}).then(doc => {
+    User.find({}).populate({
+      path: 'imagePath',
+      model: 'file'
+    }).then(doc => {
       res.status(200).send({ users: doc });
     }).catch(err => {
       res.status(500).send({ err: err });

@@ -30,6 +30,7 @@ fileController.get = async (req, res, next) => {
 fileController.create = async (req, res, next) => {
   try {
     let fileObject = req.files.thumbnail;
+    console.log(fileObject);
     let filePath = req.files.thumbnail.path.substr(req.files.thumbnail.path.lastIndexOf('\\') + 1);
     const newFile = new File({
       filePath,
