@@ -6,6 +6,7 @@ let generator = require('generate-password');
 const ROLE = require('../../shared/enums/role');
 const sgMail = require('@sendgrid/mail');
 const SENDGRID_API_KEY = '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'
+const nodemailer = require("nodemailer");
 
 const userController = {};
 
@@ -159,14 +160,19 @@ userController.login = async (req, res, next) => {
   try {
     // Get user input
     // methodtype 1 = email , 2 = phone
-    const { email, password, phoneNumber, methodType } = req.body;
-
+    const { email, password, phoneNumber, methodType } = req.body.login;
     // Validate user input
     if (!(email && password)) {
       res.status(400).send("All input is required");
     }
     // Validate if user exist in our database
-    const user = methodType === 1 ? await User.findOne({ email }) : await User.findOne({ phoneNumber });
+    const user = methodType === 1 ? await User.findOne({ email:email.toLowerCase() }).exec() : await User.findOne({ phoneNumber:phoneNumber }).exec();
+
+    if(!user.isActive){
+      const err = new Error(`Unauthorized`);
+      err.status = 401;
+      return next(err);
+    }
 
     if (!user) {
       const err = new Error(`The email ${methodType === 1 ? email : phoneNumber} was not found on our system`);
@@ -180,7 +186,7 @@ userController.login = async (req, res, next) => {
       if (matched) { //Generate JWT
         const secret = process.env.JWT_SECRET;
         const expire = process.env.JWT_EXPIRATION;
-        console.log(user);
+        
         const token = jwt.sign({ _id: user._id, ip: req.ip, userAgent: req.headers['user-agent'] }, secret, { expiresIn: expire });
         return res.send({
           id: user._id,
@@ -191,7 +197,8 @@ userController.login = async (req, res, next) => {
           phoneNumber: user.phoneNumber,
           imagePath: user.imagePath,
           token: token,
-          role: user.role
+          role: user.role,
+          expiresIn: 3600
         });
       }
       res.status(401).send({

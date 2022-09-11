@@ -13,7 +13,8 @@ exports.createSuperAdmin = () => {
                     password: process.env.password,
                     role: process.env.role,
                     phoneNumber: process.env.phoneNumber,
-                    imagePath: process.env.imagePath
+                    imagePath: process.env.imagePath,
+                    isActive: true
                 });
         
                 defaultSuperAdmin.save().then(doc => {

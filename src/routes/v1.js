@@ -18,7 +18,7 @@ const multipartMiddleware = require('../middleware/utilites/multipart')
 
 // ---------------------------- Authentication Routes--------------------------------
 router.post('/register', payloadvalidate, userController.register);
-router.post('/login', payloadvalidate, userController.login);
+router.post('/auth', payloadvalidate, userController.login);
 router.post('/logout',JWTAuth, userController.logout);
 router.post('/passwordValidity',JWTAuth, userController.passwordValidity);
 router.post('/updatePassword',JWTAuth, userController.updatePassword);
