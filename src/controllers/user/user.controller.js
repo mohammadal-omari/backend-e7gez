@@ -6,8 +6,8 @@ let generator = require('generate-password');
 const ROLE = require('../../shared/enums/role');
 const sgMail = require('@sendgrid/mail');
 const SENDGRID_API_KEY = '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'
-const nodemailer = require("nodemailer");
-
+const Cryptr = require('cryptr');
+const cryptr = new Cryptr('jkhdgjdugdfgdrfgretg');
 const userController = {};
 
 userController.updateUserProfile = async (req, res, next) => {
@@ -36,13 +36,15 @@ userController.updateUserProfile = async (req, res, next) => {
 userController.updatePassword = async (req, res, next) => {
   try {
     // Get user input
-    const { email, password } = req.body;
-
+    const { email, password } = req.body.userDto;
+    const updateUserDto = req.body.userDto;
+    updateUserDto['NonHashedPassword'] =  cryptr.encrypt(password);
+    updateUserDto.password = hash;
 
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
 
-    User.updateOne({ email: email }, { password: hash }).then(doc => {
+    User.updateOne({ email: email }, updateUserDto).then(doc => {
       return res.status(200).json({
         result: doc,
       });
@@ -122,8 +124,8 @@ userController.register = async (req, res, next) => {
       phoneNumber: phoneNumber,
       email: email.toLowerCase(), // sanitize: convert email to lowercase
       password,
+      NonHashedPassword: password,
       role,
-      imagePath: "im-user.png",
       createdBy: '62e5b1e9ba47892c09024424',
       imagePath
     });

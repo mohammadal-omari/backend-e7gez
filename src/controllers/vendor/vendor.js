@@ -7,11 +7,11 @@ const vendorController = {};
 
 vendorController.updateUserProfile = async (req, res, next) => {
   try {
-      const { firstname, lastname, email, phoneNumber } = req.body;
-      let imagePath = '';
-      let image = JSON.parse(JSON.stringify(req.files)).image.path;
-      if (image != undefined) {
-        imagePath = image.substr(image.lastIndexOf('\\') + 1);
+    const { firstname, lastname, email, phoneNumber } = req.body;
+    let imagePath = '';
+    let image = JSON.parse(JSON.stringify(req.files)).image.path;
+    if (image != undefined) {
+      imagePath = image.substr(image.lastIndexOf('\\') + 1);
     }
 
     User.findOneAndUpdate({ email: email }, { firstname: firstname, lastname: lastname, phoneNumber: phoneNumber, imagePath: imagePath })
@@ -87,8 +87,7 @@ vendorController.register = async (req, res, next) => {
       phoneNumber: phoneNumber,
       email: email.toLowerCase(), // sanitize: convert email to lowercase
       password,
-      role,
-      imagePath: "im-user.png"
+      role
     });
 
     newUser.save().then(doc => {
@@ -130,7 +129,7 @@ vendorController.login = async (req, res, next) => {
       res.status(400).send("All input is required");
     }
     // Validate if user exist in our database
-    const user =  methodType === 1 ?await User.findOne({ email }) :await User.findOne({ phoneNumber });
+    const user = methodType === 1 ? await User.findOne({ email }) : await User.findOne({ phoneNumber });
 
     if (!user) {
       const err = new Error(`The email ${methodType === 1 ? email : phoneNumber} was not found on our system`);
