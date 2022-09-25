@@ -17,7 +17,7 @@ itemController.create = async (req, res, next) => {
             admins,
             city,
             image,
-            createdBy: '62e5b1e9ba47892c09024424'
+            createdBy: req.user._id
         });
 
         newItem.save().then(doc => {

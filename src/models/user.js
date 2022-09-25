@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   dateCreated: { type: Date, default: Date.now() },
   phoneNumber: { type: String, default: 'xxxxxxxxxx', required: true },
-  NonHashedPassword: { type: String, required: false },
+  NonHashedPassword: { type: String, required: false, default: 'xxxxxxxxxx' },
   role: { type: String, default: "Admin", required: true },
   token: { type: String },
   isActive: { type: Boolean, required: true, default: true },

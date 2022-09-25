@@ -49,7 +49,7 @@ adminController.createCatogery = async (req, res, next) => {
         const newCategory = new Category({
             categoryName,
             categoryCode,
-            createdBy: '62e5b1e9ba47892c09024424'
+            createdBy: req.user._id
         });
 
         newCategory.save().then(doc => {

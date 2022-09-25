@@ -17,7 +17,7 @@ const multipartMiddleware = require('../middleware/utilites/multipart')
 /*****************************************************************************/
 
 // ---------------------------- Authentication Routes--------------------------------
-router.post('/register', payloadvalidate, userController.register);
+router.post('/register', payloadvalidate,JWTAuth, userController.register);
 router.post('/auth', payloadvalidate, userController.login);
 router.post('/logout',JWTAuth, userController.logout);
 router.post('/passwordValidity',JWTAuth, userController.passwordValidity);
@@ -25,25 +25,25 @@ router.post('/updatePassword',JWTAuth, userController.updatePassword);
 router.post('/updateUserProfile',JWTAuth, multipartMiddleware, userController.updateUserProfile);
 router.get('/userInfo/:email',JWTAuth, userController.getUserInfo);
 // ---------------------------- Item Routes ------------------------------------------
-router.post('/item/create', itemController.create);
-router.get('/item/get', itemController.getAll);
-router.get('/item/get/:itemNumber', itemController.getById);
-router.post('/item/update', itemController.update);
+router.post('/item/create',JWTAuth, itemController.create);
+router.get('/item/get',JWTAuth,  itemController.getAll);
+router.get('/item/get/:itemNumber',JWTAuth,  itemController.getById);
+router.post('/item/update',JWTAuth,  itemController.update);
 // --------------------------------User------------------------------------------------
-router.get('/user/get', userController.getAll);
-router.get('/user/get/:userNumber', userController.getById);
-router.post('/user/update', userController.updateUserProfile);
+router.get('/user/get',JWTAuth,  userController.getAll);
+router.get('/user/get/:userNumber',JWTAuth,  userController.getById);
+router.post('/user/update',JWTAuth,  userController.updateUserProfile);
 // ---------------------------- Admin Routes --------------------------------
-router.post('/category/create', adminController.createCatogery);
-router.get('/category/get', adminController.getAll);
-router.post('/category/update', adminController.updateCatogery);
-router.get('/category/get/:categoryNumber', adminController.getById);
+router.post('/category/create',JWTAuth,  adminController.createCatogery);
+router.get('/category/get',JWTAuth,  adminController.getAll);
+router.post('/category/update',JWTAuth,  adminController.updateCatogery);
+router.get('/category/get/:categoryNumber',JWTAuth,  adminController.getById);
 
 // ---------------------------- Dashboard Routes --------------------------------
-router.get('/dashborad/get', dashboardController.getAll);
-router.get('/dashborad/Feeds/get', dashboardController.getAllFeeds);
-router.post('/dashborad/Feeds/create', dashboardController.createFeed);
-router.put('/dashborad/Feeds/open/:id', dashboardController.openFeeds);
+router.get('/dashborad/get',JWTAuth,  dashboardController.getAll);
+router.get('/dashborad/Feeds/get',JWTAuth,  dashboardController.getAllFeeds);
+router.post('/dashborad/Feeds/create',  dashboardController.createFeed);
+router.put('/dashborad/Feeds/open/:id',JWTAuth,  dashboardController.openFeeds);
 
 
 // ---------------------------- Static files Routes --------------------------------

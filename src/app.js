@@ -41,10 +41,10 @@ else {
 app.use(cors({
     origin: "*",
     "methods": "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-    // "preflightContinue": true,
-    // credentials: true,
-    // optionSuccessStatus:200,
-    // "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    "preflightContinue": true,
+    credentials: true,
+    optionSuccessStatus:200,
+    "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization"
 }));
 
 app.use(bodyParser.json({ limit: "200mb" }));

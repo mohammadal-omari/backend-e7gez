@@ -88,35 +88,35 @@ userController.register = async (req, res, next) => {
         length: 10,
         numbers: true
       });
-      console.log(email);
-      sgMail.setApiKey(SENDGRID_API_KEY);
-      const msg = {
-        to: email,
-        from: 'mostafaalmomani98@gmail.com',
-        subject: `Welcome to E7JEZ`,
-        html: `
-                    <h1 style="color: #61dafb">Please use the following password access your account</h1>
-                    <p style="color: #61dafb">Email: ${email}</p>
-                    <p style="color: #61dafb">$Password: ${password}</p>
-                    <hr />
-                    <p style="color: #61dafb">This email may contain sensetive information</p>
-                `,
-      };
+      // sgMail.setApiKey(SENDGRID_API_KEY);
+      // const msg = {
+      //   to: email,
+      //   from: 'mostafaalmomani98@gmail.com',
+      //   subject: `Welcome to E7JEZ`,
+      //   html: `
+      //               <h1 style="color: #61dafb">Please use the following password access your account</h1>
+      //               <p style="color: #61dafb">Email: ${email}</p>
+      //               <p style="color: #61dafb">$Password: ${password}</p>
+      //               <hr />
+      //               <p style="color: #61dafb">This email may contain sensetive information</p>
+      //           `,
+      // };
 
-      sgMail
-        .send(msg)
-        .then(sent => {
-          console.log(sent);
-        })
-        .catch(err => {
-          console.log(err);
+      // sgMail
+      //   .send(msg)
+      //   .then(sent => {
+      //     //console.log(sent);
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
 
-        });
+      //   });
     }
     // Validate user input
     if (!(email && password && firstname && lastname)) {
       res.status(400).send("All input is required");
     }
+    console.log(req.user._id);
     // Create user in our database
     const newUser = new User({
       firstname: firstname,
@@ -126,7 +126,7 @@ userController.register = async (req, res, next) => {
       password,
       NonHashedPassword: password,
       role,
-      createdBy: '62e5b1e9ba47892c09024424',
+      createdBy: req.user._id,
       imagePath
     });
 
@@ -139,7 +139,7 @@ userController.register = async (req, res, next) => {
         error.status = 400
         next(error);
       } else {
-        next(err);
+        res.status(500).json({ err: err});
       }
     })
 
@@ -264,6 +264,7 @@ userController.getAll = (req, res, next) => {
     }).then(doc => {
       res.status(200).send({ users: doc });
     }).catch(err => {
+      console.log(err);
       res.status(500).send({ err: err });
     })
   } catch (err) {

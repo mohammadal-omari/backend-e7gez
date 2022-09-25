@@ -4,6 +4,7 @@ const User = require("../../models/user");
 const MainCategory = require('../../models/mainCategory');
 const Item = require('../../models/item');
 const Feed = require('../../models/feedBack');
+const Reservation = require('../../models/reservation');
 
 const dashboardController = {};
 
@@ -14,8 +15,9 @@ dashboardController.getAll = async (req, res, next) => {
         const Items = await Item.count();
         const OpenFeeds= await Feed.count({isActive: false});
         const ActiveFeeds= await Feed.count({isActive: true});
+        const Requests= await Reservation.count({isActive:true});
 
-        res.status(200).send({ users: Users, items: Items, openFeeds: OpenFeeds,activeFeeds:ActiveFeeds });
+        res.status(200).send({ users: Users, items: Items, openFeeds: OpenFeeds,activeFeeds:ActiveFeeds,requests:Requests });
 
     } catch (err) {
         console.log(err);
@@ -28,7 +30,7 @@ dashboardController.createFeed = async (req, res, next) => {
         const {message} = req.body.feedDto;
         const newFeed = new Feed({
             message,
-            createdBy: '62eee53a4f83fe6c8d2cdea6'
+            createdBy: '632b7b4bec27370eef7c1bb7'
         })
         newFeed.save().then(doc => {
             res.status(200).send({ message: 'Saved successfully' });
