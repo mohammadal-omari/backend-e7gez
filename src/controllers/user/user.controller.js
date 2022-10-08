@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 let generator = require('generate-password');
 const ROLE = require('../../shared/enums/role');
 const sgMail = require('@sendgrid/mail');
-const SENDGRID_API_KEY = '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'
+const SENDGRID_API_KEY = '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'
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr('jkhdgjdugdfgdrfgretg');
 const userController = {};
@@ -88,29 +88,29 @@ userController.register = async (req, res, next) => {
         length: 10,
         numbers: true
       });
-      // sgMail.setApiKey(SENDGRID_API_KEY);
-      // const msg = {
-      //   to: email,
-      //   from: 'mostafaalmomani98@gmail.com',
-      //   subject: `Welcome to E7JEZ`,
-      //   html: `
-      //               <h1 style="color: #61dafb">Please use the following password access your account</h1>
-      //               <p style="color: #61dafb">Email: ${email}</p>
-      //               <p style="color: #61dafb">$Password: ${password}</p>
-      //               <hr />
-      //               <p style="color: #61dafb">This email may contain sensetive information</p>
-      //           `,
-      // };
+      sgMail.setApiKey(SENDGRID_API_KEY);
+      const msg = {
+        to: email,
+        from: 'mostafaalmomani98@gmail.com',
+        subject: `Welcome to E7JEZ`,
+        html: `
+                    <h1 style="color: #61dafb">Please use the following password to access your account</h1>
+                    <p style="color: #181E1A">Email: ${email}</p>
+                    <p style="color: #181E1A">Password: ${password}</p>
+                    <hr />
+                    <p style="color: #E11221">This email may contain sensetive information</p>
+                `,
+      };
 
-      // sgMail
-      //   .send(msg)
-      //   .then(sent => {
-      //     //console.log(sent);
-      //   })
-      //   .catch(err => {
-      //     console.log(err);
+      sgMail
+        .send(msg)
+        .then(sent => {
+          console.log(sent);
+        })
+        .catch(err => {
+          console.log(err);
 
-      //   });
+        });
     }
     // Validate user input
     if (!(email && password && firstname && lastname)) {
