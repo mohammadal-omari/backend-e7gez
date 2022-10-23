@@ -1,5 +1,4 @@
 const Item = require('../../models/item')
-
 const itemController = {};
 
 itemController.create = async (req, res, next) => {
@@ -90,6 +89,34 @@ itemController.update = async (req, res, next) => {
         Item.updateOne({ itemNumber: itemNumber }, { image,isActive, categoryName, locationUrl, admins, city, name, country, menu }).then(doc => {
             return res.status(200).send({
                 message: 'Saved successfully'
+            });
+        }).catch(err => {
+            return res.status(500).send({
+                message: err.message
+            });
+        });
+
+    } catch (error) {
+        next(error);
+    }
+
+}
+
+itemController.getByAdminId = async (req, res, next) => {
+    try {
+        const adminId =req.params.adminId//mongoose.Schema.Types.ObjectId.fromString(req.params) ;
+        //{admins: { $elemMatch: {$eq: ObjectId('6325c8472ad02c31c5e47a3a')} }}
+        //{admins:{ $in: [ObjectId('6325c8472ad02c31c5e47a3a')] } }
+        Item.findOne({ admins: {$eq:adminId}}).populate([{
+            path: 'category',
+            model: 'category'
+        },
+        {
+         path: 'image',
+         model: 'file'
+        }]).then(doc => {
+            return res.status(200).send({
+                item: doc
             });
         }).catch(err => {
             return res.status(500).send({

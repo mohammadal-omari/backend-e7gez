@@ -191,15 +191,18 @@ userController.login = async (req, res, next) => {
         
         const token = jwt.sign({ _id: user._id, ip: req.ip, userAgent: req.headers['user-agent'] }, secret, { expiresIn: expire });
         return res.send({
-          id: user._id,
-          firstname: user.firstname,
-          lastname: user.lastname,
-          email: user.email,
-          dateCreated: user.dateCreated,
-          phoneNumber: user.phoneNumber,
-          imagePath: user.imagePath,
+          user:{
+            id: user._id,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            email: user.email,
+            dateCreated: user.dateCreated,
+            phoneNumber: user.phoneNumber,
+            imagePath: user.imagePath,
+            token: token,
+            role: user.role
+          },
           token: token,
-          role: user.role,
           expiresIn: 3600
         });
       }
@@ -215,6 +218,45 @@ userController.login = async (req, res, next) => {
   }
   // Our register logic ends here
 };
+// renewToken
+userController.renewToken = async (req, res, next) => {
+  try {
+    const data = jwt.decode(req.headers.authorization.split(" ")[1]);
+    const user = await User.findOne({_id: data._id}).exec();
+    if(!user.isActive){
+      const err = new Error(`Unauthorized`);
+      err.status = 401;
+      return next(err);
+    }
+    if (!user) {
+      const err = new Error(`The email user was not found on our system`);
+      err.status = 401;
+      return next(err);
+    }
+    const secret = process.env.JWT_SECRET;
+    const expire = process.env.JWT_EXPIRATION;
+    const token = jwt.sign({ _id: user._id, ip: req.ip, userAgent: req.headers['user-agent'] }, secret, { expiresIn: expire });
+    return res.send({
+      user:{
+        id: user._id,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        dateCreated: user.dateCreated,
+        phoneNumber: user.phoneNumber,
+        imagePath: user.imagePath,
+        token: token,
+        role: user.role
+      },
+      token: token,
+      expiresIn: 3600
+    });
+  } catch (err) {
+    console.log(err);
+    next(e);
+  }   
+};
+
 userController.logout = (req, res, next) => {
   try {
     res.status(200).send({ isLoggedOut: true });

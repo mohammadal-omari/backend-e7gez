@@ -19,6 +19,7 @@ const multipartMiddleware = require('../middleware/utilites/multipart')
 // ---------------------------- Authentication Routes--------------------------------
 router.post('/register', payloadvalidate,JWTAuth, userController.register);
 router.post('/auth', payloadvalidate, userController.login);
+router.get('/auth/renew', JWTAuth, userController.renewToken);
 router.post('/logout',JWTAuth, userController.logout);
 router.post('/passwordValidity',JWTAuth, userController.passwordValidity);
 router.post('/updatePassword',JWTAuth, userController.updatePassword);
@@ -29,6 +30,7 @@ router.post('/item/create',JWTAuth, itemController.create);
 router.get('/item/get',JWTAuth,  itemController.getAll);
 router.get('/item/get/:itemNumber',JWTAuth,  itemController.getById);
 router.post('/item/update',JWTAuth,  itemController.update);
+router.get('/item/getByAdminId/:adminId', itemController.getByAdminId);//JWTAuth, 
 // --------------------------------User------------------------------------------------
 router.get('/user/get',JWTAuth,  userController.getAll);
 router.get('/user/get/:userNumber',JWTAuth,  userController.getById);
