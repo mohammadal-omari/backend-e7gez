@@ -1,4 +1,4 @@
-const Item = require('../../models/item')
+const Item = require('../../models/vendor.model')
 const itemController = {};
 
 itemController.create = async (req, res, next) => {

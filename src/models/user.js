@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
   phoneNumber: { type: String, default: 'xxxxxxxxxx', required: true },
   NonHashedPassword: { type: String, required: false, default: 'xxxxxxxxxx' },
   role: { type: String, default: "Admin", required: true },
+  vendorId: { type: mongoose.Schema.Types.ObjectId, required: false, ref: 'vendor'},
   token: { type: String },
   isActive: { type: Boolean, required: true, default: true },
   point: { type: Number, default: 0, required: false },

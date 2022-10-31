@@ -168,7 +168,17 @@ userController.login = async (req, res, next) => {
       res.status(400).send("All input is required");
     }
     // Validate if user exist in our database
-    const user = methodType === 1 ? await User.findOne({ email:email.toLowerCase() }).exec() : await User.findOne({ phoneNumber:phoneNumber }).exec();
+    const user = methodType === 1 ? 
+    await User.findOne({ email:email.toLowerCase() })
+    .populate({
+      path: 'imagePath',
+      model: 'file'})
+      .exec() 
+    : await User.findOne({ phoneNumber:phoneNumber })
+      .populate({
+        path: 'imagePath',
+        model: 'file'})
+      .exec();
 
     if(!user.isActive){
       const err = new Error(`Unauthorized`);
@@ -191,14 +201,14 @@ userController.login = async (req, res, next) => {
         
         const token = jwt.sign({ _id: user._id, ip: req.ip, userAgent: req.headers['user-agent'] }, secret, { expiresIn: expire });
         return res.send({
-          user:{
+          user: {
             id: user._id,
             firstname: user.firstname,
             lastname: user.lastname,
             email: user.email,
             dateCreated: user.dateCreated,
             phoneNumber: user.phoneNumber,
-            imagePath: user.imagePath,
+            imagePath: user.imagePath.filePath,
             token: token,
             role: user.role
           },
@@ -222,7 +232,11 @@ userController.login = async (req, res, next) => {
 userController.renewToken = async (req, res, next) => {
   try {
     const data = jwt.decode(req.headers.authorization.split(" ")[1]);
-    const user = await User.findOne({_id: data._id}).exec();
+    const user = await User.findOne({_id: data._id})
+    .populate({
+      path: 'imagePath',
+      model: 'file'})
+    .exec();
     if(!user.isActive){
       const err = new Error(`Unauthorized`);
       err.status = 401;
@@ -244,7 +258,7 @@ userController.renewToken = async (req, res, next) => {
         email: user.email,
         dateCreated: user.dateCreated,
         phoneNumber: user.phoneNumber,
-        imagePath: user.imagePath,
+        imagePath: user.imagePath.filePath,
         token: token,
         role: user.role
       },

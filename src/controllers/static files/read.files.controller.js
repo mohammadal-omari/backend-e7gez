@@ -8,6 +8,7 @@ fileController.get = async (req, res, next) => {
 
   try {
     const { path } = req.params;
+    
     const file = pathRes.resolve(__dirname + './../../upload/' + path);
     console.log(file);
     const r = fs.createReadStream(file) // or any other way to get a readable stream

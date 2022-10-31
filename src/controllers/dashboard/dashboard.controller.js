@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const User = require("../../models/user");
 const MainCategory = require('../../models/mainCategory');
-const Item = require('../../models/item');
+const Item = require('../../models/vendor.model');
 const Feed = require('../../models/feedBack');
-const Reservation = require('../../models/reservation');
+const Reservation = require('../../models/reservation.model');
 
 const dashboardController = {};
 
