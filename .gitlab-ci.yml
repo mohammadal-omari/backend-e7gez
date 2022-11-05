@@ -4,7 +4,7 @@ stages:
 deploy: 
     image: ruby:latest
     stage: deploy
-    before-script:
+    before_script:
       - gem install dpl
     script:
       - dpl --provide=heroku --app=$APP_NAME --api -key=$HEROKU_API_KEY
