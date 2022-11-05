@@ -30,7 +30,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "backend_start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "author": "Mohammad Osama AlOmari",
   "license": "ISC",
