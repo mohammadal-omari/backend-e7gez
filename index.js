@@ -2,7 +2,7 @@
 require('dotenv').config();
 const app = require('./src/app');
 
-const PORT = process.env.API_PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 var server = app.listen(PORT, function () {
   var port = server.address().port;
