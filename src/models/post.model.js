@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const PostSchema = mongoose.Schema({
     //postNumber: { type: String, required: true, index: { unique: true } },
     text: { type: String, default: 'text', required: true },
-    image: {type: mongoose.Schema.Types.ObjectId, required: false, ref: 'file' },
+    image: {type: mongoose.Schema.Types.ObjectId,default:null, required: false, ref: 'file' },
     vendorId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'vendor'},
     isActive: { type: Boolean, required: true, default: true },
     createdBy: {type: mongoose.Schema.Types.ObjectId, required: false, ref: 'user' },

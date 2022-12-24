@@ -10,6 +10,7 @@ const vendorController = require('../controllers/vendor/vendor.controller');
 const adminController = require('../controllers/admin/admin');
 const dashboardController =  require('../controllers/dashboard/dashboard.controller');
 const fileController = require('../controllers/static files/read.files.controller');
+const postController = require('../controllers/post/post.controller');
 //-------------------------------------------------------------------------
 const payloadvalidate = require('../middleware/utilites/payloadValidate')
 const multipartMiddleware = require('../middleware/utilites/multipart')
@@ -49,6 +50,7 @@ router.put('/dashborad/Feeds/open/:id',JWTAuth,  dashboardController.openFeeds);
 
 // ---------------------------- Reservation Routes----------------------------------
 // ----------------------- Admin Mobile Dashboard Routes ---------------------------
+router.post('/post/create', postController.create);
 
 // ---------------------------- Static files Routes --------------------------------
 router.get('/readFile/:path', fileController.get);
