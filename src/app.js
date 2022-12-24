@@ -11,6 +11,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 require("./config/superadmin.create").createSuperAdmin();
 const fs = require('fs');
+let NODE_ENV = process.env.NODE_ENV.replace(/["']/g, "").trim();
 
 const SimpleNodeLogger = require('simple-node-logger'),
     opts = {
@@ -25,8 +26,7 @@ log.setLevel('error');
 log.setLevel('info');
 
 
-
-if (process.env.NODE_ENV === 'production') {
+if (NODE_ENV === 'prod') {
 
     var accessLogStream = fs.createWriteStream(__dirname + "/../server.log", { flags: 'a' });
     app.use(logger({ stream: accessLogStream }));
