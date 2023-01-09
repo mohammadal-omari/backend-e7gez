@@ -209,6 +209,7 @@ userController.login = async (req, res, next) => {
             dateCreated: user.dateCreated,
             phoneNumber: user.phoneNumber,
             imagePath: user.imagePath.filePath,
+            vendorId: user.vendorId,
             token: token,
             role: user.role
           },
@@ -259,6 +260,7 @@ userController.renewToken = async (req, res, next) => {
         dateCreated: user.dateCreated,
         phoneNumber: user.phoneNumber,
         imagePath: user.imagePath.filePath,
+        vendorId: user.vendorId,
         token: token,
         role: user.role
       },
