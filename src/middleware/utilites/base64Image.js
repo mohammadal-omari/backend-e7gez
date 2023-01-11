@@ -3,6 +3,7 @@ const fs = require('fs')
 const File = require('../../models/file')
 
 module.exports = (req, res, next) => {
+    console.log(base64FileHeaderMapper(req.body.postobj.image));
     if (req.body.postobj.image!=null) {
        // var imageFileId=null;
         const { text, image, vendorId } = req.body.postobj;
@@ -18,15 +19,23 @@ module.exports = (req, res, next) => {
             fileContentType: imageContentType,
             fileContentType: imageContentType
         });
-        newFile.save().then(doc => {
-            console.log('newFile: '+ doc);
-            req.body ={postobj:{text:text, image:doc._id, vendorId:vendorId}} ;
-        }).catch(err => {
-            console.log(err);
-            req.body ={postobj:{text:text, image:null, vendorId:vendorId}} ;
-        });
+        // newFile.save().then(doc => {
+        //     console.log('newFile: '+ doc);
+        //     req.body ={postobj:{text:text, image:doc._id, vendorId:vendorId}} ;
+        // }).catch(err => {
+        //     console.log(err);
+        //     req.body ={postobj:{text:text, image:null, vendorId:vendorId}} ;
+        // });
         
-        next();
+        next(()=>{
+            newFile.save().then(doc => {
+                console.log('newFile: '+ doc);
+                req.body ={postobj:{text:text, image:doc._id, vendorId:vendorId}} ;
+            }).catch(err => {
+                console.log(err);
+                req.body ={postobj:{text:text, image:null, vendorId:vendorId}} ;
+            });
+        });
     } else {
         next();
     }

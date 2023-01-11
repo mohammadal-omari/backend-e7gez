@@ -51,8 +51,9 @@ router.put('/dashborad/Feeds/open/:id',JWTAuth,  dashboardController.openFeeds);
 
 // ---------------------------- Reservation Routes----------------------------------
 // ----------------------- Admin Mobile Dashboard Routes ---------------------------
-router.post('/post/create',base64ImageMiddleware, postController.create);
-
+// router.post('/post/create',base64ImageMiddleware, postController.create);
+router.post('/post/create',multipartMiddleware, postController.create);
+router.get('/post/getAll/:vendorId', postController.getAllByVendorId);
 // ---------------------------- Static files Routes --------------------------------
 router.get('/readFile/:path', fileController.get);
 router.post('/thumbnail-upload/', multipartMiddleware, fileController.create);
