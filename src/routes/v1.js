@@ -14,6 +14,7 @@ const postController = require('../controllers/post/post.controller');
 //-------------------------------------------------------------------------
 const payloadvalidate = require('../middleware/utilites/payloadValidate')
 const multipartMiddleware = require('../middleware/utilites/multipart')
+const base64ImageMiddleware = require('../middleware/utilites/base64Image')
 // const multipartMiddleware = multipart({ uploadDir: __dirname+ '/../upload' });
 /*****************************************************************************/
 
@@ -50,8 +51,9 @@ router.put('/dashborad/Feeds/open/:id',JWTAuth,  dashboardController.openFeeds);
 
 // ---------------------------- Reservation Routes----------------------------------
 // ----------------------- Admin Mobile Dashboard Routes ---------------------------
-router.post('/post/create', postController.create);
-
+// router.post('/post/create',base64ImageMiddleware, postController.create);
+router.post('/post/create',multipartMiddleware, postController.create);
+router.get('/post/getAll/:vendorId', postController.getAllByVendorId);
 // ---------------------------- Static files Routes --------------------------------
 router.get('/readFile/:path', fileController.get);
 router.post('/thumbnail-upload/', multipartMiddleware, fileController.create);

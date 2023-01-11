@@ -39,7 +39,6 @@ fileController.create = async (req, res, next) => {
       fileContentType: fileObject.name,
       fileContentType: fileObject.type
     });
-
     newFile.save().then(doc => {
       console.log(doc);
       return res.status(200).send({
