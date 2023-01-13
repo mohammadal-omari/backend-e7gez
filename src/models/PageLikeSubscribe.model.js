@@ -5,10 +5,12 @@ const mongoose = require('mongoose');
 
 const PageLikeSubscribe = mongoose.Schema({
     //pageLikeSubscribe: { type: String, required: true, index: { unique: true } },
-    postId: {type: mongoose.Schema.Types.ObjectId, required: false, ref: 'post' },
+    //postId: {type: mongoose.Schema.Types.ObjectId, required: false, ref: 'post' },
     userId: {type: mongoose.Schema.Types.ObjectId, required: false, ref: 'user' },
-    flag: { type: Boolean, required: true},
-    //vendorId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'vendor'},
+    likeFlag: { type: Boolean, required: true, default:false},
+    subscribeFlag: { type: Boolean, required: true, default:false},
+    dislikeFlag: { type: Boolean, required: true, default:false},
+    vendorId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'vendor'},
     dateCreated: {type: Date,  default: Date.now()},
     dateUpdated: {type: Date,  default: Date.now()},
 });

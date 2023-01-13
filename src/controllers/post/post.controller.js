@@ -89,40 +89,63 @@ postController.create = async (req, res, next) => {
         let fileObject = req.files.thumbnail;
         const text = req.body.text;
         const vendorId =req.body.vendorId;
-        console.log(fileObject);
-        let filePath = req.files.thumbnail.path.substr(req.files.thumbnail.path.lastIndexOf('\\') + 1);
         const data = jwt.decode(req.headers.authorization.split(" ")[1]);
-        //console.log("dddddd: " + text + filePath + vendorId);
-        const newFile = new File({
-            filePath: filePath,
-            fileName: fileObject.name,
-            fileContentType: fileObject.type
-        });
-        newFile.save().then(doc => {
-            console.log('newFile: '+ doc);
-            imageFileId= doc._id;
+        //console.log(fileObject);
+        if(fileObject!=undefined){
+            if(fileObject.size>0){
+                let filePath = req.files.thumbnail.path.substr(req.files.thumbnail.path.lastIndexOf('\\') + 1);
+                const newFile = new File({
+                    filePath: filePath,
+                    fileName: fileObject.name,
+                    fileContentType: fileObject.type
+                });
+                newFile.save().then(doc => {
+                    //console.log('newFile: '+ doc);
+                    imageFileId= doc._id;
+                    const newPost = new Post({
+                        text:text,
+                        image:imageFileId,
+                        vendorId:vendorId,
+                        createdBy: data._id
+                    });
+                    //console.log('newPost : '+ newPost);
+                    newPost.save().then(doc => {
+                        //console.log("doc: "+doc);
+                        return res.status(201).send({
+                            message: 'Created successfully'
+                        });
+                    }).catch(err => {
+                        //console.log("doc: "+err);
+                        return res.status(500).send({
+                            message: err.message
+                        });
+                    });
+                }).catch(err => {
+                    //console.log(err);
+                    imageFileId= null
+                });
+            }
+        }
+        else{
             const newPost = new Post({
                 text:text,
-                image:imageFileId,
+                image:null,
                 vendorId:vendorId,
                 createdBy: data._id
             });
             console.log('newPost : '+ newPost);
             newPost.save().then(doc => {
-                console.log("doc: "+doc);
+                //console.log("doc: "+doc);
                 return res.status(201).send({
                     message: 'Created successfully'
                 });
             }).catch(err => {
-                console.log("doc: "+err);
+                //console.log("doc: "+err);
                 return res.status(500).send({
                     message: err.message
                 });
             });
-        }).catch(err => {
-            console.log(err);
-            imageFileId= null
-        });
+        }
     
     } catch (error) {
         next(error);
@@ -135,9 +158,15 @@ postController.getAllByVendorId = async (req, res, next) => {
         const { vendorId } = req.params;
         console.log("vendorId: "+vendorId);
         //var result = [];
-        const posts = await Post.find({vendorId: vendorId}).populate({
-            path: 'image',
-            model: 'file'})
+        const posts = await Post.find({vendorId: vendorId}).populate([
+            {
+                path: 'image',
+                model: 'file'
+            },
+            {
+                path: 'createdBy',
+                model: 'user'
+            }])
             .exec()
             // .then(doc => {
             //     return res.status(200).send({
@@ -149,17 +178,25 @@ postController.getAllByVendorId = async (req, res, next) => {
             //     });
             // });
         var result = [];
-        // posts.forEach(p=>{
-        //     result.add({
-        //     text:p.text,
-        //     imageFile:p.image.filePath,
-        //     vendorId,
-        //     createdBy: p.createdBy
-        //     }) 
-        // });
-        return res.status(200).send({
-            items: posts
+        posts.forEach(p=>{
+            //console.log(p.createdBy.firstname+" "+p.createdBy.lastname)
+            result.push({
+                postId:p._id,
+                text: p.text,
+                image: p.image==null?'':p.image?.filePath,
+                vendorId: p.vendorId,
+                createdBy: p.createdBy.firstname+" "+p.createdBy.lastname,
+                dateCreated: p.dateCreated,
+                likeCount: 0,
+                dislikeCount: 0,
+                commentsCount: 0
+            }) 
         });
+        // return res.status(200).send({
+        //     items: posts
+        // });
+        
+        return res.json(result);
         // .then(doc => {
         //         return res.status(200).send({
         //             items: doc

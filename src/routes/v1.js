@@ -54,6 +54,7 @@ router.put('/dashborad/Feeds/open/:id',JWTAuth,  dashboardController.openFeeds);
 // router.post('/post/create',base64ImageMiddleware, postController.create);
 router.post('/post/create',multipartMiddleware, postController.create);
 router.get('/post/getAll/:vendorId', postController.getAllByVendorId);
+router.get('/item/getPageLikeSubscribe/:vendorId', vendorController.getPageLikeSubscribe);
 // ---------------------------- Static files Routes --------------------------------
 router.get('/readFile/:path', fileController.get);
 router.post('/thumbnail-upload/', multipartMiddleware, fileController.create);

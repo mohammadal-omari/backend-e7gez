@@ -1,4 +1,5 @@
 const Item = require('../../models/vendor.model')
+const PageLikeSubscribe = require('../../models/pageLikeSubscribe.model')
 const itemController = {};
 
 itemController.create = async (req, res, next) => {
@@ -128,5 +129,31 @@ itemController.getByAdminId = async (req, res, next) => {
         next(error);
     }
 
+}
+//PageLikeSubscribe
+itemController.getPageLikeSubscribe = async (req, res, next) =>{
+    try {
+        const { vendorId } = req.params;
+        //console.log("vendorId: "+vendorId);
+        const subscribe = await PageLikeSubscribe.find({vendorId: vendorId})
+        var vendor = await Item.findOne({ _id: vendorId}).populate(
+        {
+         path: 'image',
+         model: 'file'
+        });
+        var result={name:"",image:"",likes:0,dislikes:0,subscribes:0}
+
+        result.name = vendor.name;
+        result.image = vendor.image==null?'':vendor.image.filePath,
+        subscribe.forEach(p=>{
+            if(p.likes) result.likes+=1; 
+            if(p.dislikes) result.dislikes+=1; 
+            if(p.subscribes) result.subscribes+=1; 
+        });
+
+        return res.json(result);
+    } catch (error) {
+        next(error);
+    }
 }
 module.exports = itemController;
