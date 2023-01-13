@@ -82,7 +82,7 @@ userController.register = async (req, res, next) => {
   try {
     // console.log(req.files.uploads[0].path);
     // let filePath = req.files.uploads[0].path.substr(req.files.uploads[0].path.lastIndexOf('\\') + 1);
-    let { firstname, lastname, email, password, role, phoneNumber, imagePath } = req.body.userDto;
+    let { firstname, lastname, email, password, role, phoneNumber, imagePath,vendorId } = req.body.userDto;
     if (role == ROLE.ADMIN.toString()) {
       password = generator.generate({
         length: 10,
@@ -127,7 +127,8 @@ userController.register = async (req, res, next) => {
       NonHashedPassword: password,
       role,
       createdBy: req.user._id,
-      imagePath
+      imagePath,
+      vendorId
     });
 
     newUser.save().then(doc => {
